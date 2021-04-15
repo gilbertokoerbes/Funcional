@@ -30,4 +30,25 @@ auxComp2 :: Int->[Int]->[Int]
 auxComp2 x [] = []
 auxComp2 vaiUm [xs] = auxComp2 vaiUm init xs(if (tail xs+1)>1 then vaiUm=0+1 else vaiUm=0+0)
 
+--auxComp2 -> vaiUm - 
+--auxComp2 -> if head(reverse xs) = 0 then result = 1, vaiUm = 0
+--            if head(reverse xs) = 1 then result = 0, vaiUm = 1
+--  
+
+
+--andbin :: [Int] -> [Int] -> [Int]
+--andbin [] ys = ys
+--andbin [] xs = xs
+
+--andbin (x:xs) (y:ys) = if x==1 && y==1 then [1]++andbin [x]
+--                       else [0]++andbin [x]
+
+    
+orbin :: [Int] -> [Int] -> [Int]
+orbin [] ys = ys
+orbin [] xs = xs
+
+orbin (x:xs) = if x==0 && y==0 then x : (orbin [0])
+                      else x : (orbin [1])
+
         
