@@ -15,40 +15,51 @@ dec2bin x = if x>2 then
                    if x==1 then[1]
                    else [0] 
 
+--3
+bincompl2dec ::[Int] -> Int                   
+bincompl2dec xs = if (head xs)==1 then negate(bin2dec(compl2 xs)) else bin2dec(compl2 xs)
+
 --4
+--OBS: Somente decimais positivos serão passados para seu valor equivalente e complemento de dois
 dec2bincompl :: Int->[Int]
-dec2bincompl x = (auxCompl1(dec2bin x))
+dec2bincompl x = (compl2(dec2bin x))
+
+---------------------------------------------------
+--PARA COMPLEMENTO DE 2
+compl2 ::[Int]->[Int]
+compl2 xs = if (last xs)==1 then reverse(inveter(tail (reverse xs)))++[1] else compl2(init xs)++[0]
+
 
 --inverte bit a bit
-auxCompl1 :: [Int]->[Int]
-auxCompl1 [] = []
-auxCompl1 (x:xs) = if x==1 then 
-                    [0]++auxCompl1 xs 
-                   else [1]++auxCompl1 xs
+inveter :: [Int]->[Int]
+inveter [] = []
+inveter (x:xs) = if x==1 then 
+                    [0]++inveter xs 
+                   else [1]++inveter xs
+--------------------------------------------------
 
-auxComp2 :: Int->[Int]->[Int]
-auxComp2 x [] = []
-auxComp2 vaiUm [xs] = auxComp2 vaiUm init xs(if (tail xs+1)>1 then vaiUm=0+1 else vaiUm=0+0)
+--5
+somarbin :: [Int]->[Int]->[Int]
+somarbin (xs) (ys) =  andbin (compl2 xs)(compl2 ys)
 
---auxComp2 -> vaiUm - 
---auxComp2 -> if head(reverse xs) = 0 then result = 1, vaiUm = 0
---            if head(reverse xs) = 1 then result = 0, vaiUm = 1
---  
+--6
 
 
---andbin :: [Int] -> [Int] -> [Int]
---andbin [] ys = ys
---andbin [] xs = xs
 
---andbin (x:xs) (y:ys) = if x==1 && y==1 then [1]++andbin [x]
---                       else [0]++andbin [x]
+--7
+andbin :: [Int] -> [Int] -> [Int]
+andbin  xs [] = xs
+andbin [] xs = xs
+andbin (x:xs) (y:ys) = if x==1 && y==1 then [1]++andbin xs ys else [0]++andbin xs ys
 
-    
+--8    
 orbin :: [Int] -> [Int] -> [Int]
-orbin [] ys = ys
+orbin  xs [] = xs
 orbin [] xs = xs
+orbin (x:xs) (y:ys) = if x==1 || y==1 then [1]++orbin xs ys else [0]++orbin xs ys
 
-orbin (x:xs) = if x==0 && y==0 then x : (orbin [0])
-                      else x : (orbin [1])
+--[10],[5] = ([1,0,1,0],[0])
 
-        
+
+--frac2bin :: Double -> ([Int],[Int])
+
