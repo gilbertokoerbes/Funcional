@@ -16,6 +16,7 @@ bin2dec (x:xs) = bin2dec xs + x*2^length xs
 ---------------------------
 --2
 dec2bin :: Int-> [Int]
+dec2bin 0 = [0]
 dec2bin x = if x>2 then
                 dec2bin(x`div`2)++[x `mod` 2]
             else 
@@ -34,7 +35,8 @@ dec2bin x = if x>2 then
 
 -----------------------------
 --3 
-bincompl2dec ::[Int] -> Int                   
+bincompl2dec :: [Int] -> Int  
+bincompl2dec [] = 0                 
 bincompl2dec xs = if (head xs)==1 then 
                         negate(bin2dec(compl2 xs)) 
                     else bin2dec(compl2 xs)
@@ -65,29 +67,55 @@ bincompl2dec xs = if (head xs)==1 then
 --4
 --OBS: Somente decimais positivos serão passados para seu valor equivalente e complemento de dois
 dec2bincompl :: Int->[Int]
+dec2bincompl 0 = [0]
 dec2bincompl x = (compl2(dec2bin x))
 
 ---------------------------------------------------
 --PARA COMPLEMENTO DE 2 sem o bit de sinal
-compl2 ::[Int]->[Int]
-compl2 xs = if (last xs)==1 then reverse(inveter(tail (reverse xs)))++[1] else compl2(init xs)++[0]
+compl2 :: [Int]->[Int]
+compl2 xs = if (last xs)==1 then reverse(inverter(tail (reverse xs)))++[1] else compl2(init xs)++[0]
 
 
 --inverte bit a bit
-inveter :: [Int]->[Int]
-inveter [] = []
-inveter (x:xs) = if x==1 then 
-                    [0]++inveter xs 
-                   else [1]++inveter xs
+inverter :: [Int]->[Int]
+inverter [] = []
+inverter (x:xs) = if x==1 then 
+                    [0]++inverter xs 
+                   else [1]++inverter xs
 
                    
 --------------------------------------------------
 
 --5
 somarbin :: [Int]->[Int]->[Int]
+somarbin [] [] = []
+somarbin xs [] = xs
+somarbin [] xs = xs
 somarbin (xs) (ys) =  dec2bin ((bin2dec(compl2 xs)) + (bin2dec(compl2 ys)))
 
+
+-- ERRO DE EXEMPLO
+
+--somarbin [1,0,1][0,0,1] => dec2bin ((bin2dec(compl2 xs)) + (bin2dec(compl2 ys)))
+--dec2bin ((bin2dec(compl2 [1,0,1])) + (bin2dec(compl2 [0,0,1])))
+--dec2bin ((bin2dec( reverse(inverter(tail (reverse [1,0,1])))++[1] )) + (bin2dec( reverse(inverter(tail (reverse [0,0,1])))++[1] )))
+--dec2bin ((bin2dec( reverse(inverter(tail([1,0,1])))++[1] )) + (bin2dec (reverse(inverter (tail ([1,0,0])))++[1]))
+--dec2bin ((bin2dec( reverse(inverter([0,1])))++[1])) + (bin2dec (reverse(inverter([0,0])))++[1]))
+--dec2bin ((bin2dec( reverse([1]++inverter[1])))++[1])) + (bin2dec(reverse([1]++inverter [0])))++[1]))
+--dec2bin ((bin2dec(reverse([1]++[0]++inverter[]))))++[1])) + (bin2dec(reverse([1]++[1]++inverter [])))++[1]))
+--dec2bin ((bin2dec(reverse([1,0,1])))) + (bin2dec(reverse([1,1,1])))
+--dec2bin ((bin2dec [1,0,1])) + (bin2dec [1,1,1]))
+--dec2bin ((5) + (7))
+--dec2bin (12)
+--[1,1,0,0]
+ 
+-- ------------------
+
+
 subtrairbin :: [Int]->[Int]->[Int]
+subtrairbin [] [] = []
+subtrairbin xs [] = xs
+subtrairbin [] xs = []
 subtrairbin (xs) (ys) =  dec2bin ((bin2dec(compl2 xs)) - (bin2dec(compl2 ys)))
 
 
@@ -100,16 +128,30 @@ subtrairbin (xs) (ys) =  dec2bin ((bin2dec(compl2 xs)) - (bin2dec(compl2 ys)))
 
 --7
 andbin :: [Int] -> [Int] -> [Int]
+andbin [] [] = []
 andbin  xs [] = xs
 andbin [] xs = xs
 andbin (x:xs) (y:ys) = if x==1 && y==1 then [1]++andbin xs ys else [0]++andbin xs ys
 
+--andbin [1,0,1][0,1,1] => [0]++andbin xs ys
+--[0]++andbin [0,1] [1,1]
+--[0]++[0]++andbin [1] [1]
+--[0]++[0]++[1]++andbin xs ys
+--[0]++[0]++[1]++andbin [] []
+--[0,0,1]
+
 --8    
 orbin :: [Int] -> [Int] -> [Int]
+orbin [] [] = []
 orbin  xs [] = xs
 orbin [] xs = xs
 orbin (x:xs) (y:ys) = if x==1 || y==1 then [1]++orbin xs ys else [0]++orbin xs ys
 
+--orbin [1,0,1] [0,1,1] => [1]++orbin xs ys
+--[1]++orbin [0,1] [1,1]
+--[1]++[1]++orbin [1] [1]
+--[1]++[1]++[1]++orbin [] []
+--[1,1,1]
 
 
 --------------
