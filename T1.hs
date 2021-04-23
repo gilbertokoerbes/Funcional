@@ -41,34 +41,52 @@ bincompl2dec xs = if (head xs)==1 then
                         negate(bin2dec(compl2 xs)) 
                     else bin2dec(compl2 xs)
 
---[0,1,1,0] => bin2dec(compl2 [0,1,1,0])
---bin2dec(compl2 [0,1,1,0])
---bin2dec(compl2([0,1,1])++[0])
---bin2dec(reverse(inveter(tail (reverse xs)))++[1]++[0])
---bin2dec(reverse(inveter(tail ([1,1,0])))++[1]++[0])
---bin2dec(reverse(inveter([1,0]))++[1]++[0])
---bin2dec(reverse([0]++inveter [0])++[1]++[0])
---bin2dec(reverse([0]++[1]++inveter [])++[1]++[0])
---bin2dec(reverse([0]++[1]++[])++[1]++[0])
---bin2dec(reverse[0,1]++[1]++[0])
---bin2dec([1,0]++[1]++[0])
---bin2dec([1,0,1,0]) => bin2dec (x:xs) = bin2dec xs + x*2^length xs
---bin2dec [0,1,0] + 1*2^length 3
---bin2dec [1,0] + 8
---bin2dec [0] + 1*2^length 1 + 8
---bin2dec [] + 0*2^length 0 + 2 + 8
---bin2dec [] + 0 + 2 + 8
---0 + 0 + 2 + 8
--- 10
+
+    --[1,0,1,1,0] => negate(bin2dec(compl2 [1,0,1,1,0])))
+    --negate(bin2dec(compl2 [1,0,1,1,0])))
+    --negate(bin2dec(compl2 ([1,0,1,1])++[0])
+    --negate(bin2dec(reverse(inverter(tail (reverse xs)))++[1]++[0]))
+    --negate(bin2dec(reverse(inverter(tail ([1,1,0,1])))++[1]++[0]))
+    --negate(bin2dec(reverse(inverter([1,0,1])))++[1]++[0]))
+    --negate(bin2dec(reverse([0]++inverter [0,1])))++[1]++[0]))
+    --negate(bin2dec(reverse([0]++[1]++inverter [1])))++[1]++[0]))
+    --negate(bin2dec(reverse([0]++[1]++0]++inverter [])))++[1]++[0]))
+    --negate(bin2dec(reverse([0,1,0])))++[1]++[0]))
+    --negate(bin2dec([0,1,0])++[1]++[0])
+    --negate(bin2dec([0,1,0,1,0]) => bin2dec xs + x*2^length xs
+    --negate(bin2dec [1,0,1,0] + 0*2^length 4)
+    --negate(bin2dec [1,0,1,0] + 0)
+    --negate(bin2dec [0,1,0] + 1*2^length 3 + 0)
+    --negate(bin2dec [0,1,0] + 8 + 0)
+    --negate(bin2dec [1,0] + 0*2^length 2 + 8 + 0)
+    --negate(bin2dec [1,0] + 0 + 8 + 0)
+    --negate(bin2dec [0] + 1*2^length 1 + 0 + 8 + 0)
+    --negate(bin2dec [0] + 2 + 0 + 8 + 0)
+    --negate(bin2dec [] + 0*2^length 0 + 2 + 0 + 8 + 0)
+    --negate(0 + 0 + 2 + 0 + 8 + 0)
+    --negate(10)
+    -- -10
 
 
 ----------------------
 
 --4
---OBS: Somente decimais positivos serão passados para seu valor equivalente e complemento de dois
+--OBS: Somente decimais positivos serão passados para seu valor equivalente em complemento de dois
 dec2bincompl :: Int->[Int]
 dec2bincompl 0 = [0]
 dec2bincompl x = (compl2(dec2bin x))
+
+-- 4 => (compl2(dec2bin x))
+-- (compl2(dec2bin 4))
+-- (compl2(dec2bin(4`div`2)++[4 `mod` 2]))
+-- (compl2([1,0]++[0]))
+-- compl2([1,0,0])
+-- compl2([1,0])++[0]
+-- compl2([1])++[0]++[0]
+-- reverse(inverter(tail (reverse [])))++[1]++[0]++[0]
+-- reverse(inverter(tail ([])))++[1]++[0]++[0]
+-- []++[1]++[0]++[0]
+-- [1,0,0] (SEM BIT DE SINAL)
 
 ---------------------------------------------------
 --PARA COMPLEMENTO DE 2 sem o bit de sinal
@@ -93,22 +111,24 @@ somarbin xs [] = xs
 somarbin [] xs = xs
 somarbin (xs) (ys) =  dec2bin ((bin2dec(compl2 xs)) + (bin2dec(compl2 ys)))
 
+-- A função funciona normalmente, porém sua demonstração por recursão é muito grande...
 
--- ERRO DE EXEMPLO
 
---somarbin [1,0,1][0,0,1] => dec2bin ((bin2dec(compl2 xs)) + (bin2dec(compl2 ys)))
---dec2bin ((bin2dec(compl2 [1,0,1])) + (bin2dec(compl2 [0,0,1])))
---dec2bin ((bin2dec( reverse(inverter(tail (reverse [1,0,1])))++[1] )) + (bin2dec( reverse(inverter(tail (reverse [0,0,1])))++[1] )))
---dec2bin ((bin2dec( reverse(inverter(tail([1,0,1])))++[1] )) + (bin2dec (reverse(inverter (tail ([1,0,0])))++[1]))
---dec2bin ((bin2dec( reverse(inverter([0,1])))++[1])) + (bin2dec (reverse(inverter([0,0])))++[1]))
---dec2bin ((bin2dec( reverse([1]++inverter[1])))++[1])) + (bin2dec(reverse([1]++inverter [0])))++[1]))
---dec2bin ((bin2dec(reverse([1]++[0]++inverter[]))))++[1])) + (bin2dec(reverse([1]++[1]++inverter [])))++[1]))
---dec2bin ((bin2dec(reverse([1,0,1])))) + (bin2dec(reverse([1,1,1])))
---dec2bin ((bin2dec [1,0,1])) + (bin2dec [1,1,1]))
---dec2bin ((5) + (7))
---dec2bin (12)
---[1,1,0,0]
- 
+--somarbin [0,1,1,0][1,0,1] =>  dec2bin ((bin2dec(compl2 xs)) + (bin2dec(compl2 ys)))
+--dec2bin ((bin2dec(compl2 [0,1,1,0])) + (bin2dec(compl2 [1,0,1])))
+--dec2bin ((bin2dec(compl2(init [0,1,1,0])++[0])) + (bin2dec(reverse(inverter(tail (reverse [1,0,1])))++[1])))
+--dec2bin ((bin2dec(compl2([0,1,1])++[0])) + (bin2dec(reverse(inverter(tail ([1,0,1])))++[1])))
+--dec2bin ((bin2dec(reverse(inverter(tail (reverse [0,1,1])))++[1]++[0]))
+--dec2bin ((bin2dec(reverse(inverter(tail [1,1,0]))++[1]++[0]))
+--dec2bin ((bin2dec(reverse(inverter[1,0])++[1]++[0]))
+--dec2bin ((bin2dec(reverse[0,1]++[1]++[0]))
+--dec2bin ((bin2dec([1,0]++[1]++[0]))
+--dec2bin ((bin2dec[1,0,1,0])
+-- ...
+-- [1,1,0,1]
+
+
+
 -- ------------------
 
 
@@ -119,11 +139,6 @@ subtrairbin [] xs = []
 subtrairbin (xs) (ys) =  dec2bin ((bin2dec(compl2 xs)) - (bin2dec(compl2 ys)))
 
 
-
---xorbin
---xorbin :: Int -> Int ->Int
---xorbin q w = if q==w then 0 else 1
---
 
 
 --7
@@ -162,6 +177,11 @@ frac2bin x = if (x - (fromIntegral(floor x))) > 0 then
                     (dec2bin(floor x),dec2bin(multdez(x - (fromIntegral(floor x)))))
             else (dec2bin(floor x),[0])
 
+
+--frac2bin 4.2 => (dec2bin(floor x),dec2bin(multdez(x - (fromIntegral(floor x)))))
+--(dec2bin(floor 4.2),dec2bin(multdez(4.2 - (fromIntegral(floor 4.2)))))
+--(dec2bin(4),dec2bin(multdez(4 - (fromIntegral(4)))))
+--(dec2bin(4),dec2bin(multdez(4 - (4))))
 
 multdez :: Double -> Int
 --posvirgula y = floor y
