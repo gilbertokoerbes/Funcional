@@ -111,19 +111,20 @@ somarbin xs [] = xs
 somarbin [] xs = xs
 somarbin (xs) (ys) =  dec2bin ((bin2dec(compl2 xs)) + (bin2dec(compl2 ys)))
 
--- A função funciona normalmente, porém sua demonstração por recursão é muito grande...
+
+-- A função funciona normalmente, porém sua demonstração por recursão se torna extensa por executar a chamada de outras recursoes que fazem recusoes ...
 
 
 --somarbin [0,1,1,0][1,0,1] =>  dec2bin ((bin2dec(compl2 xs)) + (bin2dec(compl2 ys)))
 --dec2bin ((bin2dec(compl2 [0,1,1,0])) + (bin2dec(compl2 [1,0,1])))
 --dec2bin ((bin2dec(compl2(init [0,1,1,0])++[0])) + (bin2dec(reverse(inverter(tail (reverse [1,0,1])))++[1])))
 --dec2bin ((bin2dec(compl2([0,1,1])++[0])) + (bin2dec(reverse(inverter(tail ([1,0,1])))++[1])))
---dec2bin ((bin2dec(reverse(inverter(tail (reverse [0,1,1])))++[1]++[0]))
---dec2bin ((bin2dec(reverse(inverter(tail [1,1,0]))++[1]++[0]))
---dec2bin ((bin2dec(reverse(inverter[1,0])++[1]++[0]))
---dec2bin ((bin2dec(reverse[0,1]++[1]++[0]))
---dec2bin ((bin2dec([1,0]++[1]++[0]))
---dec2bin ((bin2dec[1,0,1,0])
+--dec2bin ((bin2dec(reverse(inverter(tail (reverse [0,1,1])))++[1]++[0])) + ...
+--dec2bin ((bin2dec(reverse(inverter(tail [1,1,0]))++[1]++[0])) + ...
+--dec2bin ((bin2dec(reverse(inverter[1,0])++[1]++[0])) + ....
+--dec2bin ((bin2dec(reverse[0,1]++[1]++[0])) + ....
+--dec2bin ((bin2dec([1,0]++[1]++[0])) + ....
+--dec2bin ((bin2dec[1,0,1,0]) + ......
 -- ...
 -- [1,1,0,1]
 
@@ -172,26 +173,40 @@ orbin (x:xs) (y:ys) = if x==1 || y==1 then [1]++orbin xs ys else [0]++orbin xs y
 --------------
 --9
 frac2bin :: Double -> ([Int],[Int])
---frac2bin x = if (x - (fromIntegral(floor x))) > 0 then (dec2bin(floor x),[0]) else ([0],[0])
 frac2bin x = if (x - (fromIntegral(floor x))) > 0 then 
                     (dec2bin(floor x),dec2bin(multdez(x - (fromIntegral(floor x)))))
             else (dec2bin(floor x),[0])
 
-
---frac2bin 4.2 => (dec2bin(floor x),dec2bin(multdez(x - (fromIntegral(floor x)))))
---(dec2bin(floor 4.2),dec2bin(multdez(4.2 - (fromIntegral(floor 4.2)))))
---(dec2bin(4),dec2bin(multdez(4 - (fromIntegral(4)))))
---(dec2bin(4),dec2bin(multdez(4 - (4))))
+--frac2bin 10.25 => if (10.25 - (fromIntegral(floor 10.25))) > 0
+--    frac2bin 10.25 => if (10.25 - fromIntegral 10) > 0
+--        frac2bin 10.25 => if 0.25 > 0
+--(dec2bin(floor 10.25),dec2bin(multdez(10.25 - (fromIntegral(floor 10.25)))))
+--(dec2bin(10),dec2bin(multdez(10.25 - (fromIntegral 10))))
+--([1,0,1,0],dec2bin(multdez(10.25 - 10)))
+--([1,0,1,0],dec2bin(multdez(0.25))) => multdez (0.25 - (fromIntegral(floor 0.25))) > 0
+--([1,0,1,0],dec2bin(multdez(0.25))) => multdez (0.25 - 0) > 0
+--([1,0,1,0],dec2bin(multdez (0.25*10)))
+--([1,0,1,0],dec2bin(multdez (2.5*10)))
+--([1,0,1,0],dec2bin 25)  => multdez -> else floor y
+--([1,0,1,0],[])
 
 multdez :: Double -> Int
---posvirgula y = floor y
 multdez y = if (y - (fromIntegral(floor y))) > 0 then multdez (y*10) else floor y
--------------
 
+
+-------------
 --10
 bin2frac ::([Int],[Int]) -> Double
 bin2frac (x,y) = (fromIntegral(bin2dec x)) + (divdez(fromIntegral(bin2dec y)))
 
+--bin2frac ([1,0,1,0][1,0,1]) => (fromIntegral(bin2dec x)) + (divdez(fromIntegral(bin2dec y)))
+--(fromIntegral(bin2dec [1,0,1,0])) + (divdez(fromIntegral(bin2dec [1,0,1])))
+--(fromIntegral 10) + (divdez(fromIntegral 5))
+--10 + (divdez 5)
+--10 + divdez(5/10) -- if>=1
+--10 + divdez 0.5 -- else (y/1) para nao chamar recursao
+--10 + 0.5
+--10.5
 
 divdez :: Double -> Double
 divdez y = if (y>=1) then divdez(y/10) else (y/1)
